@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="cart_lines_inherit_website_bom_description" inherit_id="website_sale.cart_lines"
+              name="Bom in Shopping Cart Lines">
+        <xpath expr="//td[hasclass('td-product_name')]" position="inside">
+            <div>
+                <t t-if="line.product_id.product_tmpl_id">
+                    <t t-foreach="bom_products" t-as="li">
+                        <t t-if="li.product_tmpl_id.id == line.product_id.product_tmpl_id.id">
+                            <span class="text-muted d-none d-md-block small">Bill of Material :
+                                <t t-foreach="li.bom_line_ids" t-as="line_ids">
+                                    <t t-if="li.product_tmpl_id.id == line.product_id.product_tmpl_id.id">
+                                        <t t-esc="line_ids.product_id.name"/>
+                                        -
+
+                                        <t t-esc="line_ids.product_qty"/>
+                                        Qty
+                                        ,
+
+                                    </t>
+
+                                </t>
+                            </span>
+                        </t>
+                    </t>
+                    <!--                        <t t-foreach="li.product_tmpl_id.ids" t-as="a">-->
+                    <!--                            <t t-foreach="list" t-as="b">-->
+                    <!--                                <t t-if="a == b">-->
+                    <!--                                    <t t-foreach="li.bom_line_ids.product_id.product_tmpl_id" t-as="c">-->
+                    <!--                                        <t t-esc="c.name"/>-->
+                    <!--                                    </t>-->
+
+                    <!--                                </t>-->
+
+                    <!--                            </t>-->
+
+                    <!--                        </t>-->
+
+                    <!--                    </t>-->
+
+
+                </t>
+            </div>
+
+
+        </xpath>
+
+    </template>
+
+</odoo>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    calender view-->
+    <record id="view_booking_calendar" model="ir.ui.view">
+        <field name="name">travel.customer.calendar</field>
+        <field name="model">travel.customer</field>
+        <field name="arch" type="xml">
+            <calendar string="Bookings" date_start="travel_start_date" color="state"
+                      hide_time="true">
+
+                <field name="customer_id" avatar_field="avatar_128"/>
+                <field name="no_of_passengers"/>
+                <field name="service"/>
+                <field name="booking_date"/>
+                <field name="source_id"/>
+                <field name="destination_id"/>
+                <field name="expiration_date"/>
+                <field name="travel_start_date"/>
+                <field name="travel_end_date"/>
+                <field name="state"/>
+
+
+            </calendar>
+        </field>
+    </record>
+
+    <!--    search view-->
+    <record id="travel_search" model="ir.ui.view">
+
+        <field name="name">travel.customer.search</field>
+        <field name="model">travel.customer</field>
+        <field name="arch" type="xml">
+            <search string="customer">
+                <field name="customer_id"/>
+                <field name="reference"/>
+                <filter string="Confirmed" name="confirm" domain="[('state', '=', 'confirm')]"/>
+                <filter string="Expired" name="expired" domain="[('state', '=', 'expired')]"/>
+                <filter string="Bus" name="bus" domain="[('service', '=', 'bus')]"/>
+                <filter string="Train" name="train" domain="[('service', '=', 'train')]"/>
+                <filter string="Flight" name="flight" domain="[('service', '=', 'flight')]"/>
+                <filter string="Bookings" name="filter" domain="[('state', '!=', 'expired')]"/>
+
+                <separator/>
+                <group string="Group By" expand="1" name="groupby">
+                    <filter string="Type" name="type" context="{'group_by': 'service'}"/>
+                    <filter string="Travelling Date" name="travelling_date"
+                            context="{'group_by': 'travel_start_date'}"/>
+                    <filter string="Destination Location" name='destination' context="{'group_by': 'destination_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <!--    tree view-->
+    <record model="ir.ui.view" id="view_customer_tree">
+        <field name="name">travel.customer.tree</field>
+        <field name="model">travel.customer</field>
+        <field name="arch" type="xml">
+            <tree default_order='booking_date desc'>
+
+                <field name="reference"/>
+                <field name="customer_id"/>
+                <field name="service"/>
+                <field name="booking_date"/>
+                <field name="source_id" optional="hide"/>
+                <field name="destination_id" optional="hide"/>
+                <field name="state" optional="hide"/>
+
+            </tree>
+        </field>
+    </record>
+
+
+    <!--    form view-->
+
+    <record model="ir.ui.view" id="view_customer_form">
+        <field name="name">travel.customer.form</field>
+        <field name="model">travel.customer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable' : '1'}"
+                           statusbar_visible="draft,confirm,expired"/>
+                    <button id="button_confirm" name="action_confirm_" string="Confirm" states="draft"
+                            class="btn-primary" type="object"/>
+                    <button id="button_draft" name="action_draft" string="Draft" states="confirm"
+                            class="btn-primary" type="object"/>
+                    <button name="action_invoice" string="Create Invoice" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
+
+
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="check_invoice" type="object" class="oe_stat_button"
+                                icon="fa-pencil-square-o" attrs="{'invisible': [('state', '!=', 'create_invoice')]}">
+                            Invoice
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="customer_id" context="{'show_address': 1}"
+                                   options="{'always_reload': True}"/>
+                            <field name="no_of_passengers"/>
+                            <field name="service"/>
+                            <field name="service_id" options="{'no_create': True}"/>
+                            <field name="booking_date"/>
+                            <field name="fees" attrs="{'invisible': [('service_id', '!=', False)]}"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="expiration_date"
+                                   attrs="{'invisible': [('state', 'in', ['confirm','expired'])]}"/>
+                            <field name="source_id"/>
+                            <field name="destination_id"/>
+                            <field name="travel_start_date"/>
+                            <field name="travel_end_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+
+                        <page string="Package Estimation Amount" name="estimation_price_line"
+                              attrs="{'invisible': [('service_id', '=', False)]}">
+                            <field name="estimation_price_line_ids">
+                                <tree name="estimation_price_line_tree" editable="bottom">
+                                    <field name="service_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit"/>
+                                    <!--                                    <field name="price"/>-->
+                                    <field name="currency_id" invisible="1"/>
+
+                                    <field name="price" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+
+
+                                </tree>
+
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="totals" widget="monetary"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--    travel view-->
+    <record id="customer_action" model="ir.actions.act_window">
+        <field name="name">Bookings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">travel.customer</field>
+        <field name="view_mode">tree,form,kanban,calendar</field>
+        <field name="context">{'search_default_filter': 1}</field>
+
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                create your own bookings
+            </p>
+        </field>
+    </record>
+
+    <!--menu-->
+    <menuitem id="customer_root"
+              name="Travel Management"
+              sequence="10"/>
+
+    <menuitem id="travel_customer_root"
+              name="Bookings"
+              parent="customer_root"
+              sequence="10"/>
+
+    <menuitem id="travel_customer_root2"
+              name="Bookings"
+              parent="travel_customer_root"
+              action="customer_action"
+              sequence="10"/>
+    <menuitem id="travel_customer_report"
+              name="Travel Management Report"
+              parent="customer_root"
+              sequence="40"/>
+    <menuitem id="travel_customer_report_1"
+              name="Travel Management Report"
+              parent="travel_customer_report"
+              action="action_travel_report"
+              sequence="40"/>
+</odoo>

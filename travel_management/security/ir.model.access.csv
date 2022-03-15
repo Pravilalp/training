@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_travel_customer,access.travel.customer,model_travel_customer,group_travel_user,1,1,1,0
+access_travel_customer1,access.travel.customer1,model_travel_customer,group_travel_manager,1,1,1,1
+access_customer_location,account.customer.location,model_customer_location,,1,1,1,1
+access_travel_service,account.travel.service,model_travel_service,group_travel_user,1,1,0,1
+access_travel_service1,account.travel.service1,model_travel_service,group_travel_manager,1,1,1,1
+access_travel_vehicle,account.travel.vehicle,model_travel_vehicle,,1,1,1,1
+access_travel_facilities,account.travel.facilities,model_travel_facilities,,1,1,1,1
+access_travel_charges,account.travel.charges,model_travel_charges,,1,1,1,1
+access_travel_package,account.travel.package,model_travel_package,group_travel_user,1,1,1,0
+access_travel_package1,account.travel.package1,model_travel_package,group_travel_manager,1,1,1,1
+access_travel_estimation,account.travel.estimation,model_travel_estimation,,1,1,1,1
+access_estimation_price,account.estimation.price,model_estimation_price,,1,1,1,1
+access_report_wizard,account.report.wizard,model_report_wizard,,1,1,1,1
+

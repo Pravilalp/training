@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">Sale Order Custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_confirm']" position="after">
+                <button name="action_approve"
+                        string="Approve"
+                        states="to_approve"
+                        groups="sales_team.group_sale_manager"
+                        class="oe_highlight" type="object"/>
+            </xpath>
+            <xpath expr="//header/button[@name='action_approve']" position="after">
+                <button name="action_disapprove"
+                        string="Disapprove"
+                        class="oe_highlight"
+                        states="to_approve"
+                        groups="sales_team.group_sale_manager"
+                        type="object"/>
+            </xpath>
+            <xpath expr="//field[@name='validity_date']" position="after">
+                <field name="user_check" invisible="1"/>
+                <field name="price_check" invisible="1"/>
+                <field name="approve_check" invisible="1"/>
+
+
+            </xpath>
+            <xpath expr="//header/button[@name='action_confirm']" position="after">
+                <button name="manager_submit"
+                        string="Send to Manager"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|','|',('user_check', '=', False),('price_check', '!=', True),
+                        ('state', '!=', ('draft'))]}"
+                        type="object"/>
+            </xpath>
+
+            <xpath expr="//header/button[@name='action_cancel']" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'in', ('draft'))]}
+                </attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

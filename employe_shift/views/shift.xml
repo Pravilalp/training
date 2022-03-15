@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_inherit" model="ir.ui.view">
+        <field name="name">Employee shift</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='coach_id']" position="after">
+                <field name="shift_id"/>
+            </xpath>
+
+        </field>
+    </record>
+    <record id="view_employee_tree_inherit" model="ir.ui.view">
+        <field name="name">Employee Attendance</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='check_out']" position="after">
+                <field name="late"/>
+                <field name="early"/>
+            </xpath>
+
+        </field>
+    </record>
+    <!--        tree view-->
+    <record model="ir.ui.view" id="view_shift_tree">
+        <field name="name">employee.shift.tree</field>
+        <field name="model">employee.shift</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="start_time" widget='float_time'/>
+                <field name="end_time" widget='float_time'/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_employee_shift_form_" model="ir.ui.view">
+        <field name="name">employee shift</field>
+        <field name="model">employee.shift</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+
+                    </group>
+                    <group>
+                        <field name="start_time" widget='float_time'/>
+                        <field name="end_time" widget='float_time'/>
+                    </group>
+                </group>
+
+            </form>
+
+        </field>
+    </record>
+    <!--    travel view-->
+    <record id="hr_shift_action" model="ir.actions.act_window">
+        <field name="name">Shift</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">employee.shift</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                create your own shift
+            </p>
+        </field>
+    </record>
+    <menuitem id="shift_menu_root"
+              name="Shift"
+              parent="hr.menu_hr_root"
+              sequence="40"/>
+    <menuitem id="shift_menu"
+              name="Shift"
+              parent="shift_menu_root"
+              action="hr_shift_action"
+              sequence="40"/>
+
+
+</odoo>

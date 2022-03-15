@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    calender view-->
+    <record id="view_travel_calendar" model="ir.ui.view">
+        <field name="name">travel.package.calendar</field>
+        <field name="model">travel.package</field>
+        <field name="arch" type="xml">
+            <calendar string="Tour Packages" date_start="travel_start" color="state"
+                      hide_time="true">
+
+                <field name="customer_id" avatar_field="avatar_128"/>
+                <field name="source_id"/>
+                <field name="destination_id"/>
+                <field name="travel_start"/>
+                <field name="travel_end"/>
+                <field name="vehicle_type"/>
+                <field name="vehicle_list"/>
+
+
+            </calendar>
+        </field>
+    </record>
+    <!--    tree view-->
+    <record model="ir.ui.view" id="view_package_tree">
+        <field name="name">travel.package.tree</field>
+        <field name="model">travel.package</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="reference"/>
+                <field name="customer_id"/>
+                <field name="source_id"/>
+                <field name="destination_id"/>
+                <field name="vehicle_type"/>
+                <field name="vehicle_list"/>
+                <field name="no_of_travellers"/>
+                <field name="travel_start"/>
+                <field name="travel_end"/>
+
+            </tree>
+        </field>
+    </record>
+
+
+    <!--    form view-->
+
+    <record model="ir.ui.view" id="view_package_form">
+        <field name="name">travel.package.form</field>
+        <field name="model">travel.package</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable' : '1'}"
+                           statusbar_visible="draft,confirm"/>
+                    <button id="button_confirm" name="action_confirm" string="Confirm" states="draft"
+                            class="btn-primary" type="object"/>
+                    <button id="button_draft" name="action_draft" string="Draft" states="confirm"
+                            class="btn-primary" type="object"/>
+
+
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="customer_id" context="{'show_address': 1}"
+                                   options="{'always_reload': True}"/>
+                            <field name="quotation_date"/>
+                            <field name="source_id"/>
+                            <field name="destination_id"/>
+                            <field name="facilities" widget="many2many_tags"
+                                   options="{'no_create': True}"/>
+                            <field name="service_id" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="travel_start"/>
+                            <field name="travel_end"/>
+                            <field name="vehicle_type"/>
+                            <field name="no_of_travellers"/>
+
+                            <field name="vehicle_list" options="{'no_create': True}"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Estimation" name="tour_estimation_line">
+                            <field name="vehicle_estimation_line_ids">
+                                <tree name="vehicle_estimation_line_tree" editable="bottom">
+                                    <field name="service_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit"/>
+                                    <!--                                    <field name="price"/>-->
+                                    <field name="currency_id" invisible="1"/>
+
+                                    <field name="price" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+
+                                </tree>
+
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total" force_save="1"/>
+                            </group>
+
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--        travel view-->
+    <record id="customer_action3" model="ir.actions.act_window">
+        <field name="name">Tour Packages</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">travel.package</field>
+        <field name="view_mode">tree,form,kanban,calendar</field>
+
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                create your own Tour Package
+            </p>
+        </field>
+    </record>
+    <!--Tour package menu-->
+
+    <menuitem id="travel_customer_package"
+              name="Tour Package"
+              parent="customer_root"
+              sequence="30"/>
+    <menuitem id="travel_customer_package1"
+              name="Tour Package"
+              parent="travel_customer_package"
+              action="customer_action3"
+              sequence="30"/>
+</odoo>

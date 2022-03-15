@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!--    tree view-->
+
+
+    <record model="ir.ui.view" id="view_service_tree">
+        <field name="name">travel.service.tree</field>
+        <field name="model">travel.service</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="service"/>
+                <field name="expiration_period"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- form view-->
+
+    <record model="ir.ui.view" id="view_service_form">
+        <field name="name">travel.service.form</field>
+        <field name="model">travel.service</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="service"/>
+                        </group>
+                        <group>
+                            <label for="expiration_period" string="Expiration period"/>
+                            <div class="o_row">
+                                <field name="expiration_period"/>
+                                <span>Days</span>
+                            </div>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--        travel view-->
+    <record id="customer_action1" model="ir.actions.act_window">
+        <field name="name">Service Types</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">travel.service</field>
+        <field name="view_mode">tree,form,kanban</field>
+
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                create your own service type
+            </p>
+        </field>
+    </record>
+
+    <!--configuration menu-->
+    <menuitem id="travel_customer_configuration"
+              name="Configuration"
+              parent="customer_root"
+              sequence="40"/>
+
+    <menuitem id="travel_customer_service"
+              name="Service Types"
+              parent="travel_customer_configuration"
+              action="customer_action1"
+              sequence="40"/>
+</odoo>

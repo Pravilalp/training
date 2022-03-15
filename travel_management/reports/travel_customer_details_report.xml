@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_travel_customer_details">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="text-center">
+                        <h2>Travel Management Report</h2>
+                    </div>
+                    <table>
+
+                        <tr>
+                            <td>Date From</td>
+                            <td>:</td>
+                            <td>
+                                <t t-if="form.get('travel_start_date')">
+                                    <t t-esc="form['travel_start_date']"/>
+                                </t>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Date To</td>
+                            <td>:</td>
+                            <td>
+                                <t t-if="form.get('travel_end_date')">
+                                    <t t-esc="form['travel_end_date']"/>
+                                </t>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Customer</td>
+                            <td>:</td>
+                            <td>
+                                <t t-if="form.get('customer_id')">
+                                    <t t-esc="form['customer_id'][1]"/>
+                                </t>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="table table-bordered mt32">
+                        <thead>
+                            <tr>
+                                <td class="text-left">SL.NO</td>
+                                <td class="text-left">Source Location</td>
+                                <td class="text-left">Destination Location</td>
+                                <td class="text-left">Vehicle Name</td>
+                                <td class="text-left">State</td>
+                            </tr>
+                        </thead>
+                        <t t-set="j" t-value="1"/>
+                        <t>
+                            <tr t-foreach="record" t-as="line">
+                                <td>
+                                    <t t-esc="j"/>
+                                </td>
+                                <t t-set="j" t-value="j + 1"/>
+                                <t t-foreach="line" t-as="k">
+                                    <td>
+                                        <t t-esc="k[0]"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
